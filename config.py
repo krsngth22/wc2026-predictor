@@ -54,3 +54,21 @@ ELO_TOURNAMENT_WEIGHT = {
     "Friendly": 20,
 }
 ELO_DEFAULT_WEIGHT = 30  # for tournaments not explicitly listed above
+
+# ---- Team name reconciliation ----
+# The historical dataset (Day 1, from GitHub) and SofaScore (Day 3, live data) don't
+# always use the same team names. This maps SofaScore's naming -> the historical
+# dataset's naming, so a team's real Elo/attack/defense rating is used instead of
+# silently falling back to a flat league-average. Confirmed/likely mismatches for
+# 2026 World Cup teams - run `python -m src.check_team_names` to verify the full list
+# against your actual data and catch anything missing here.
+TEAM_NAME_ALIASES = {
+    "USA": "United States",
+    "Türkiye": "Turkey",
+    "Côte d'Ivoire": "Ivory Coast",
+    "Cabo Verde": "Cape Verde",
+    "Bosnia & Herzegovina": "Bosnia and Herzegovina",
+    "Curaçao": "Curacao",
+    "South Korea": "South Korea",
+    "DR Congo": "DR Congo",
+}

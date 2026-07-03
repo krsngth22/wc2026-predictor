@@ -22,7 +22,7 @@ from scipy.optimize import minimize
 from scipy.stats import poisson
 
 sys.path.append(str(Path(__file__).parent.parent))
-from config import DATA_PROCESSED
+from config import DATA_PROCESSED, TEAM_NAME_ALIASES
 
 XI = 0.0018            # time-decay rate per day (~1 year half-life)
 REG_LAMBDA = 0.08       # L2 regularization on attack/defense (identifiability + shrinkage for thin data)
@@ -130,7 +130,10 @@ class DixonColesModel:
     def _strength(self, team: str):
         if team in self.attack:
             return self.attack[team], self.defense[team]
-        return 0.0, 0.0  # unseen team -> league-average fallback
+        alias = TEAM_NAME_ALIASES.get(team)
+        if alias and alias in self.attack:
+            return self.attack[alias], self.defense[alias]
+        return 0.0, 0.0  # genuinely unseen team -> league-average fallback
 
     def predict_score_matrix(self, home_team: str, away_team: str, neutral: bool = True,
                               max_goals: int = MAX_GOALS):
