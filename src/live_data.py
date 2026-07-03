@@ -102,8 +102,23 @@ def fetch_fixtures() -> pd.DataFrame:
                 break
             page += 1
 
-    df = pd.DataFrame(rows).drop_duplicates(subset="fixture_id")
+    new_df = pd.DataFrame(rows).drop_duplicates(subset="fixture_id")
     out_path = DATA_PROCESSED / "wc2026_fixtures.csv"
+
+    if out_path.exists():
+        old_df = pd.read_csv(out_path)
+        combined = pd.concat([old_df, new_df], ignore_index=True)
+        # If we've ever seen a fixture as "finished", keep it that way permanently -
+        # the API's "last matches" window can shift and stop returning older
+        # finished matches, but that doesn't mean the match un-happened.
+        status_rank = {"finished": 2, "inprogress": 1, "notstarted": 0}
+        combined["_rank"] = combined["status"].map(status_rank).fillna(-1)
+        combined = combined.sort_values("_rank", ascending=False).drop_duplicates(
+            subset="fixture_id", keep="first").drop(columns="_rank")
+        df = combined
+    else:
+        df = new_df
+
     df.to_csv(out_path, index=False)
     print(f"  -> {len(df)} unique fixtures saved to {out_path}")
     print(f"  -> {(df['status'] == 'finished').sum()} finished so far")
