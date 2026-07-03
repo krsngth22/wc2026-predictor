@@ -24,11 +24,16 @@ HIST_RESULTS_URL = "https://raw.githubusercontent.com/martj42/international_resu
 HIST_GOALSCORERS_URL = "https://raw.githubusercontent.com/martj42/international_results/master/goalscorers.csv"
 HIST_SHOOTOUTS_URL = "https://raw.githubusercontent.com/martj42/international_results/master/shootouts.csv"
 
-# API-Football (RapidAPI) - needed for live 2026 fixtures, corners, lineups, player stats.
-# Free tier: https://rapidapi.com/api-sports/api/api-football  (~100 req/day free)
-API_FOOTBALL_KEY = os.environ.get("API_FOOTBALL_KEY", "")
-API_FOOTBALL_HOST = "api-football-v1.p.rapidapi.com"
-API_FOOTBALL_BASE = "https://api-football-v1.p.rapidapi.com/v3"
+# SofaScore (RapidAPI, provider "apidojo") - needed for live 2026 fixtures, corners,
+# lineups, player stats. https://rapidapi.com/apidojo/api/sofascore
+SOFASCORE_API_KEY = os.environ.get("SOFASCORE_API_KEY", "")
+SOFASCORE_HOST = "sofascore.p.rapidapi.com"
+SOFASCORE_BASE = "https://sofascore.p.rapidapi.com"
+
+# SofaScore internal IDs for this tournament - confirmed via the playground:
+# it's labeled "World Championship" internally, not "FIFA World Cup"
+SOFASCORE_TOURNAMENT_ID = 16
+SOFASCORE_SEASON_ID = 58210   # World Cup 2026
 
 # 2026 World Cup competition metadata
 WC2026_YEAR = 2026
